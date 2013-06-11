@@ -115,7 +115,7 @@ EventMachine.run {
 
   @completed_channel = EM::Channel.new
 
-  @mysql_client = Mysql2::EM::Client.new(:username => "metalive", :password => "Edau2Olein", :database => "metalive")
+  @mysql_client = Mysql2::EM::Client.new(:username => ENV.fetch("MYSQL_USER", "metalive"), :password => ENV.fetch("MYSQL_PASSWORD", "Edau2Olein"), :database => "metalive")
 
   EM.start_server '0.0.0.0', 8080, ApiServer, @channel, @mysql_client
 
@@ -136,15 +136,19 @@ EventMachine.run {
       begin
         if http.response_header.status == 200
           json = JSON.parse(http.response)
-          first_album = json["results"]["albummatches"]["album"].first if json["results"]["albummatches"]
+
+          albums = json["results"]["albummatches"]["album"]
+          first_album = (Array === albums ? albums.first : albums)
 
           if first_album
             image = first_album["image"].find { |image| image["size"] == "medium" }
             event["description"]["cover"] = image["#text"] if image
           end
+        else
+          puts "Error in lastfm request: #{http.response_header.status}"
         end
-      rescue => e
-        puts "Failed to find cover: #{e}"
+      rescue Error => e
+        puts "Failed to find cover: #{e} #{e.backtrace}"
       end
 
       callback.call
