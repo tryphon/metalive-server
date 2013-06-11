@@ -1,0 +1,18 @@
+#!/bin/bash
+
+definition="$*"
+
+OIFS=$IFS
+IFS='@'
+arguments=($definition)
+IFS=$OIFS
+
+title="${arguments[0]}"
+group="${arguments[1]}"
+artist="${arguments[2]}"
+album="${arguments[3]}"
+
+echo "title: '$title', group: '$group', artist: '$artist', album: '$album'" | logger -i -t ml-notif
+curl -X POST -d "{\"description\": {\"title\": \"$title\", \"group\": \"$group\", \"artist\": \"$artist\", \"album\": \"$album\"}}" http://localhost:8080
+
+
