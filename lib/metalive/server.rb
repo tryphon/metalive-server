@@ -115,7 +115,7 @@ EventMachine.run {
 
   @completed_channel = EM::Channel.new
 
-  @mysql_client = Mysql2::EM::Client.new(:username => "root", :password => "root", :database => "metalive")
+  @mysql_client = Mysql2::EM::Client.new(:username => "metalive", :password => "Edau2Olein", :database => "metalive")
 
   EM.start_server '0.0.0.0', 8080, ApiServer, @channel, @mysql_client
 
@@ -133,14 +133,18 @@ EventMachine.run {
 
     http = EM::HttpRequest.new(url).get
     http.callback do
-      if http.response_header.status == 200
-        json = JSON.parse(http.response)
-        first_album = json["results"]["albummatches"]["album"].first
+      begin
+        if http.response_header.status == 200
+          json = JSON.parse(http.response)
+          first_album = json["results"]["albummatches"]["album"].first if json["results"]["albummatches"]
 
-        if first_album
-          image = first_album["image"].find { |image| image["size"] == "medium" }
-          event["description"]["cover"] = image["#text"] if image
+          if first_album
+            image = first_album["image"].find { |image| image["size"] == "medium" }
+            event["description"]["cover"] = image["#text"] if image
+          end
         end
+      rescue => e
+        puts "Failed to find cover: #{e}"
       end
 
       callback.call

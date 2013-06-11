@@ -51,7 +51,7 @@ function receive_event(json) {
 
 function init() {
     var Socket = "MozWebSocket" in window ? MozWebSocket : WebSocket;
-    var ws = new Socket("ws://localhost:8081/");
+    var ws = new Socket("ws://metalive.tryphon.eu:8081/");
     ws.onmessage = function(evt) {
         debug("Message: " + evt.data);
         receive_event(evt.data);
@@ -59,7 +59,7 @@ function init() {
     ws.onclose = function() { debug("socket closed"); };
 
     var request = new XMLHttpRequest();
-    request.open("GET", "http://localhost:8080/last", true);
+    request.open("GET", "http://metalive.tryphon.eu:8080/last", true);
     request.onreadystatechange = function() {
         if (request.readyState == 4 && request.status == 200) {
             receive_event(request.responseText);
@@ -91,7 +91,7 @@ function search(form) {
     debug("Term: '" + term + "'");
 
     var request = new XMLHttpRequest();
-    request.open("GET", "http://localhost:8080/?" + term, true);
+    request.open("GET", "http://metalive.tryphon.eu:8080/?" + term, true);
     request.onreadystatechange = function() {
         if (request.readyState == 4 && request.status == 200) {
             receive_events(request.responseText);
