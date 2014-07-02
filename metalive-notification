@@ -1,16 +1,34 @@
-#!/bin/bash
+#!/usr/bin/env ruby
 
-definition="$*"
+require 'rubygems'
 
-OIFS=$IFS
-IFS='@'
-arguments=($definition)
-IFS=$OIFS
+require 'net/http'
+require 'json'
 
-title="${arguments[0]}"
-group="${arguments[1]}"
-artist="${arguments[2]}"
-album="${arguments[3]}"
+definition = ARGV.join(' ')
+arguments = Hash[ [[:title, :group, :artist, :album], definition.split('@') ].transpose ]
 
-echo "title: '$title', group: '$group', artist: '$artist', album: '$album'" | logger -i -t ml-notif
-curl -X POST -d "{\"description\": {\"title\": \"$title\", \"group\": \"$group\", \"artist\": \"$artist\", \"album\": \"$album\"}}" http://metalive.tryphon.eu:8080
+http = Net::HTTP.new("metalive.tryphon.eu", 8080)
+#http.use_ssl = true
+#http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+request = Net::HTTP::Post.new("/")
+request.add_field('Content-Type', 'application/json')
+request.body = {'description' => arguments }.to_json
+response = http.request(request)
+
+exit 0
+
+# definition="$*"
+
+# OIFS=$IFS
+# IFS='@'
+# arguments=($definition)
+# IFS=$OIFS
+
+# title="${arguments[0]}"
+# group="${arguments[1]}"
+# artist="${arguments[2]}"
+# album="${arguments[3]}"
+
+# echo "title: '$title', group: '$group', artist: '$artist', album: '$album'" | logger -i -t ml-notif
+# curl -X POST -d "{\"description\": {\"title\": \"$title\", \"group\": \"$group\", \"artist\": \"$artist\", \"album\": \"$album\"}}" http://metalive.tryphon.eu:8080

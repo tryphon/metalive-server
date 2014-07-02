@@ -1,0 +1,42 @@
+.event {
+    height: 64px;
+    margin: 5px 0;
+    padding: 5px;
+    color: #888;
+    position: relative;
+}
+
+.event span {
+    color: black;
+    font-size: 1.1em;
+}
+
+.event span.title {
+    font-weight: bold;
+    margin-right: 4px;
+}
+
+.event span.album {
+    margin-left: 4px;
+}
+
+.event span.since {
+    display: block;
+    margin-top: 5px;
+
+    font-size: 0.9em;
+    color: #888;
+
+    position: absolute;
+    left: 75px;
+    bottom: 5px;
+}
+
+.event img.cover {
+    float: left;
+    margin-right: 5px;
+}
+
+#search input[name=term] {
+    width: 300px;
+}
