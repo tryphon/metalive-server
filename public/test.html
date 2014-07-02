@@ -4,21 +4,19 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <script src="juration.js"></script>
     <script src="metalive.js"></script>
     <link href="test.css" media="screen" rel="stylesheet" type="text/css"/>
-    <link href="base.css" media="screen" rel="stylesheet" type="text/css"/>
   </head>
-  <body onload="init();">
+  <body onload="new Metalive.Stream('test').display()">
     <div id="content">
-      <div id="current"></div>
+      <div class="metalive" id="metalive_current"></div>
 
-      <form id="search" onsubmit="search(this); return false;">
+      <form class="metalive search" onsubmit="return new Metalive.Stream('test').search(this);">
         <input type="text" name="term" />
         <input type="submit" value="Rechercher"/>
       </form>
 
-      <div id="result"></div>
+      <div class="metalive" id="metalive_search_result"></div>
     </div>
   </body>
 </html>

@@ -1,4 +1,4 @@
-.event {
+.metalive .event {
     height: 64px;
     margin: 5px 0;
     padding: 5px;
@@ -6,21 +6,21 @@
     position: relative;
 }
 
-.event span {
+.metalive .event span {
     color: black;
     font-size: 1.1em;
 }
 
-.event span.title {
+.metalive .event span.title {
     font-weight: bold;
     margin-right: 4px;
 }
 
-.event span.album {
+.metalive .event span.album {
     margin-left: 4px;
 }
 
-.event span.since {
+.metalive .event span.since {
     display: block;
     margin-top: 5px;
 
@@ -32,11 +32,11 @@
     bottom: 5px;
 }
 
-.event img.cover {
+.metalive .event img.cover {
     float: left;
     margin-right: 5px;
 }
 
-#search input[name=term] {
+.metalive.search input[name=term] {
     width: 300px;
 }

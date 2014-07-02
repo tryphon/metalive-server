@@ -16,6 +16,13 @@ server "radio.dbx1.tryphon.priv", :app, :web, :db, :primary => true
 # after "deploy:restart", "deploy:cleanup"
 
 namespace :deploy do
+  # Prevent errors when chmod isn't allowed by server
+  task :setup, :except => { :no_release => true } do
+    dirs = [deploy_to, releases_path, shared_path]
+    dirs += shared_children.map { |d| File.join(shared_path, d) }
+    run "mkdir -p #{dirs.join(' ')} && (chmod g+w #{dirs.join(' ')} || true)"
+  end
+
   task :start do ; end
   task :stop do ; end
   task :restart, :roles => :app, :except => { :no_release => true } do
