@@ -174,7 +174,7 @@
     function EventView(target, current) {
       this.target = target;
       this.current = current != null ? current : true;
-      this.template = "<p class='event'> <img class='cover' src='{{ description.cover }}'> <div class='description'> <span class='title'>{{ description.title }}</span> par&nbsp;<span class='artist'>{{ description.artist }}</span> sur&nbsp;l'album&nbsp;<span class='album'>{{ description.album }}</span> </div> <span class='since'>{{ description.distance_from_now }}</span> </p>";
+      this.template = "<div class='event'> <img class='cover' src='{{ description.cover }}'> <div class='description'> <span class='title'>{{ description.title }}</span> par&nbsp;<span class='artist'>{{ description.artist }}</span> sur&nbsp;l'album&nbsp;<span class='album'>{{ description.album }}</span> </div> <span class='since'>{{ description.distance_from_now }}</span> </div>";
     }
 
     EventView.prototype.complete = function(event) {
