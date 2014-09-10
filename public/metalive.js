@@ -1,5 +1,6 @@
 (function() {
-  var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   this.Metalive = (function() {
     function Metalive() {}
@@ -66,6 +67,8 @@
   this.Metalive.Stream = (function() {
     function Stream(id) {
       this.id = id;
+      this.redisplay_later = __bind(this.redisplay_later, this);
+      this.redisplay = __bind(this.redisplay, this);
       this.receivers = [];
     }
 
@@ -111,7 +114,7 @@
       return request.send(null);
     };
 
-    Stream.prototype.init_web_socket = function() {
+    Stream.prototype.connect_web_socket = function() {
       var Socket, socket;
       Socket = __indexOf.call(window, "MozWebSocket") >= 0 ? MozWebSocket : WebSocket;
       Metalive.log("connet websocket to stream " + this.id);
@@ -123,7 +126,8 @@
       })(this);
       return socket.onclose = (function(_this) {
         return function() {
-          return Metalive.log("socket closed");
+          Metalive.log("socket closed");
+          return _this.redisplay_later();
         };
       })(this);
     };
@@ -135,8 +139,17 @@
       }
       target = document.getElementById(target_id);
       this.receivers = [new Metalive.EventView(target)];
+      return this.redisplay();
+    };
+
+    Stream.prototype.redisplay = function() {
       this.retrieve_last_event();
-      return this.init_web_socket();
+      return this.connect_web_socket();
+    };
+
+    Stream.prototype.redisplay_later = function() {
+      Metalive.log("Redisplay in 30s");
+      return setTimeout(this.redisplay, 30000);
     };
 
     Stream.prototype.search = function(form, target_id) {

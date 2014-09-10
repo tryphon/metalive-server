@@ -68,7 +68,7 @@ class @Metalive.Stream
 
     request.send null
 
-  init_web_socket: ->
+  connect_web_socket: ->
     Socket = if "MozWebSocket" in window then MozWebSocket else WebSocket
 
     Metalive.log "connet websocket to stream #{@id}"
@@ -79,13 +79,21 @@ class @Metalive.Stream
 
     socket.onclose = () =>
       Metalive.log "socket closed"
+      @redisplay_later()
 
   display: (target_id = "metalive_current") ->
     target = document.getElementById(target_id);
     @receivers = [ new Metalive.EventView(target) ]
 
+    @redisplay()
+
+  redisplay: () =>
     @retrieve_last_event()
-    @init_web_socket()
+    @connect_web_socket()
+
+  redisplay_later: () =>
+    Metalive.log "Redisplay in 30s"
+    setTimeout(@redisplay, 30000)
 
   search: (form, target_id = "metalive_search_result") ->
     term = form.elements[0].value
