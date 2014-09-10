@@ -4,14 +4,38 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+    <script>
+      var urlParams;
+      (window.onpopstate = function () {
+        var match,
+        pl     = /\+/g,  // Regex for replacing addition symbol with a space
+        search = /([^&=]+)=?([^&]*)/g,
+        decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+        query  = window.location.search.substring(1);
+
+        urlParams = {};
+        while (match = search.exec(query))
+         urlParams[decode(match[1])] = decode(match[2]);
+      })();
+    </script>
+
     <script src="metalive.js"></script>
+
+    <script>
+      stream_id = urlParams["id"];
+      if (typeof stream_id === 'undefined') {
+        stream_id = "test"
+      }
+      metalive = new Metalive.Stream(stream_id);
+    </script>
+
     <link href="test.css" media="screen" rel="stylesheet" type="text/css"/>
   </head>
-  <body onload="new Metalive.Stream('test').display()">
+  <body onload="metalive.display()">
     <div id="content">
       <div class="metalive" id="metalive_current"></div>
 
-      <form class="metalive search" onsubmit="return new Metalive.Stream('test').search(this);">
+      <form class="metalive search" onsubmit="return metalive.search(this);">
         <input type="text" name="term" />
         <input type="submit" value="Rechercher"/>
       </form>
