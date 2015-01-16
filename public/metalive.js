@@ -153,15 +153,22 @@
     };
 
     Stream.prototype.search = function(form, target_id) {
-      var request, target, term;
+      var query, request, target, term;
       if (target_id == null) {
         target_id = "metalive_search_result";
       }
-      term = form.elements[0].value;
-      Metalive.debug("search term: '" + term + "'");
+      Metalive.log("Search events");
+      query = "";
+      if (form != null) {
+        term = form.elements[0].value;
+        if (term.length > 0) {
+          Metalive.log("Search with term: '" + term + "'");
+          query = "?term=" + term;
+        }
+      }
       target = document.getElementById(target_id);
       request = new XMLHttpRequest();
-      request.open("GET", this.api_url("events.json?term=" + term), true);
+      request.open("GET", this.api_url("events.json" + query), true);
       request.onreadystatechange = (function(_this) {
         return function() {
           var event, events, _i, _len;

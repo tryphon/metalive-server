@@ -96,13 +96,19 @@ class @Metalive.Stream
     setTimeout(@redisplay, 30000)
 
   search: (form, target_id = "metalive_search_result") ->
-    term = form.elements[0].value
-    Metalive.debug("search term: '" + term + "'")
+    Metalive.log "Search events"
+    query = ""
+
+    if form?
+      term = form.elements[0].value
+      if term.length > 0
+        Metalive.log "Search with term: '" + term + "'"
+        query = "?term=#{term}"
 
     target = document.getElementById(target_id);
 
     request = new XMLHttpRequest()
-    request.open "GET",  @api_url("events.json?term=#{term}"), true
+    request.open "GET",  @api_url("events.json#{query}"), true
     request.onreadystatechange = () =>
       if request.readyState == 4 && request.status == 200
         events = JSON.parse request.responseText
